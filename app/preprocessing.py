@@ -46,11 +46,11 @@ def process_and_index_file(file, filename):
 
 
     try:
-        log_event("INFO", f"cleaning text has started")
-        cleaned = text_handler.clean_text(raw_text)
-        log_event("INFO", f"the text was sucsesfully cleaned")
+        log_event("INFO", f"generating embeddings has started")
+        embeddings = text_handler.generate_embeddigns(chunks)
+        log_event("INFO", f"embeddings are sucssefly generated")
     except Exception as e:
-        log_event("ERROR", f"an error happend while cleaning the text: {e}")
+        log_event("ERROR", f"an error happend while generating embeddings: {e}")
 
 
     try:
