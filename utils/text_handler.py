@@ -52,11 +52,4 @@ class TEXT_HANDLER():
         embeddings = embedding_model.encode(text_chunks, convert_to_numpy=True)
         embeddings = np.array(embeddings, dtype="float32")
 
-        index = faiss.IndexFlatL2(embeddings.shape[1])
-        index.add(embeddings)
-
-        filepath = os.path.join(INDEX_FOLDER, 'index.bin')
-        faiss.write_index(index, filepath)
-
-
         return embeddings
