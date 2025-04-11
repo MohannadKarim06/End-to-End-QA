@@ -11,8 +11,8 @@ from logs.logger import log_event
 
 app = FastAPI()
 
-RELEVENT_CHUNK_SCORE_THRESHOLD = 0.6
-MODEL_RESPONSE_SCORE_THRESHOLD = 0.6
+RELEVENT_CHUNK_SCORE_THRESHOLD = 0.7
+MODEL_RESPONSE_SCORE_THRESHOLD = 65
 
 @app.post("/upload")
 async def upload_file(file: UploadFile = File(...)):
@@ -27,25 +27,41 @@ async def upload_file(file: UploadFile = File(...)):
 
 @app.post("/ask")
 async def ask_question(
-    question: str = Form(...),
-    filename: str = Form(...)
+    question: str = Form(...)
 ):
-    index_path = os.path.join(INDEX_DIR, "uploaded_doucement.index")
+    filename = "uploaded_document"
+    index_path = os.path.join("data", "index", f"{filename}.index")
 
     if not os.path.exists(index_path):
         return JSONResponse(status_code=404, content={"error": "Index for file not found."})
+
     try:
-        log_event("INFO", "Retriving relevant chunk has started")
-        chunk, score = search_top_chunk(question=question, filename="uploaded_doucement")
-        log_event("INFO", "Relevnent chunk was succsesfully retrived")
+        log_event("INFO", "Retrieving relevant chunk has started")
+        result = search_top_chunk(question=question, filename=filename)
+        chunk = result["chunk"]
+        score = result["score"]
+        log_event("INFO", "Relevant chunk was successfully retrieved")
     except Exception as e:
-        log_event("ERROR", f"an error occured while retriving relevant chunk: {e}")    
-    
+        log_event("ERROR", f"An error occurred while retrieving relevant chunk: {e}")
+        return {"answer": "error retrieving chunk", "confidence": 0.0, "score": 0.0}
+
     if score < RELEVENT_CHUNK_SCORE_THRESHOLD:
+        return {"answer": "no text found", "confidence": 0.0, "score": round(score, 4)}
 
-        return {"answer": "No relevant answer found.", "confidence": 0.0, "score": round(score, 4)}
+    try:
+        log_event("INFO", "Generating the answer from the model")
+        result = get_answer(question, chunk)
+        log_event("INFO", "The answer was successfully generated")
+    except Exception as e:
+        log_event("ERROR", f"An error occurred while generating answer: {e}")
+        return {"answer": "error generating answer", "confidence": 0.0, "score": round(score, 4)}
 
-    result = get_answer(question, chunk)
+    if result["confidence"] < MODEL_RESPONSE_SCORE_THRESHOLD:
+        return {
+            "answer": "no answer found",
+            "score": round(score, 4),
+            "chunk": chunk
+        }
 
     return {
         "answer": result["answer"],

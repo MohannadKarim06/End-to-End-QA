@@ -3,9 +3,9 @@ from datetime import datetime
 
 
 logging.basicConfig(
-    filename="chatbot.log",
+    filename="logs.log",
     level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s",  # Log format
+    format="%(asctime)s - %(levelname)s - %(message)s",
 )
 
 
