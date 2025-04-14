@@ -30,7 +30,7 @@ async def ask_question(
     question: str = Form(...)
 ):
     filename = "uploaded_document"
-    index_path = os.path.join("data", "index", f"{filename}.index")
+    index_path = os.path.join("data", "index", "uploaded_file.index")
 
     if not os.path.exists(index_path):
         return JSONResponse(status_code=404, content={"error": "Index for file not found."})

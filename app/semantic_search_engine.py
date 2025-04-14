@@ -10,20 +10,20 @@ text_handler = TEXT_HANDLER()
 INDEX_DIR = r"data\index"
 
 
-def load_faiss_index(filename):
+def load_faiss_index():
 
-    index_path = os.path.join(INDEX_DIR, f"{filename}.index")
+    index_path = os.path.join(INDEX_DIR, f"uploaded_file.index")
     return faiss.read_index(index_path)
 
-def load_chunks(filename):
+def load_chunks():
 
-    chunks_path = os.path.join(INDEX_DIR, f"{filename}_chunks.npy")
+    chunks_path = os.path.join(INDEX_DIR, f"uploaded_file_chunks.npy")
     return np.load(chunks_path, allow_pickle=True)
 
 def search_top_chunk(question: str, filename: str):
     
-    index = load_faiss_index(filename)
-    chunks = load_chunks(filename)
+    index = load_faiss_index()
+    chunks = load_chunks()
 
     question_embedding = text_handler.generate_embeddings([question]).astype("float32")
 
