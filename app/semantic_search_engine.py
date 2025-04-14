@@ -7,7 +7,7 @@ from utils.text_handler import TEXT_HANDLER
 
 
 text_handler = TEXT_HANDLER()
-INDEX_DIR = "data//index//"
+INDEX_DIR = r"data\index"
 
 
 def load_faiss_index(filename):

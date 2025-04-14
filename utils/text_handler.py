@@ -2,7 +2,6 @@ import re
 import spacy
 import numpy as np
 from sentence_transformers import SentenceTransformer
-import faiss
 import os, sys
 
 
@@ -13,19 +12,19 @@ nlp = spacy.load("en_core_web_sm")
 embedding_model = SentenceTransformer("all-MiniLM-L6-v2")  
 
 
-INDEX_FOLDER = "data\index"
+INDEX_FOLDER = r"data\index"
 
 class TEXT_HANDLER():
     
 
-    def clean_text(text):
+    def clean_text(self, text):
         """Cleans text: removes special characters, multiple spaces, and extra newlines."""
         text = re.sub(r'\s+', ' ', text)  # Remove extra spaces
         text = re.sub(r'[^a-zA-Z0-9\s.,!?]', '', text)  # Remove special characters
         return text.strip()
 
 
-    def chunk_text(text, max_tokens=512):
+    def chunk_text(self, text, max_tokens=512):
         """Splits long text into smaller chunks (512 tokens max) for transformer processing."""
         doc = nlp(text)
         chunks = []
@@ -47,7 +46,7 @@ class TEXT_HANDLER():
         return chunks
 
 
-    def generate_embeddings(text_chunks):
+    def generate_embeddings(self, text_chunks):
         """Generates vector embeddings for text chunks using SentenceTransformers."""
         embeddings = embedding_model.encode(text_chunks, convert_to_numpy=True)
         embeddings = np.array(embeddings, dtype="float32")

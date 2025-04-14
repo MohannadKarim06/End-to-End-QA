@@ -1,6 +1,7 @@
 import os, sys
 import numpy as np
 import faiss
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from utils.file_handler import FILE_HANDLER
@@ -8,25 +9,26 @@ from utils.text_handler import TEXT_HANDLER
 from logs.logger import log_event
 
 
-INDEX_DIR = "data//index//"
-UPLOAD_DIR = "data//uploaded_files//"
+INDEX_DIR = r"data\index"
+UPLOAD_DIR = r"data\uploaded_files"
 
 file_handler = FILE_HANDLER()
 text_handler = TEXT_HANDLER()
 
 
-def process_and_index_file(file, filename):
-    
+async def process_and_index_file(file, filename): 
     try:
         log_event("INFO", f"saving file has started")
-        filepath = file_handler.save_uploaded_file(file, filename)
+        filepath = await file_handler.save_uploaded_file(file, filename) 
+        log_event("PROCESS", filepath)
     except Exception as e:
-        log_event("ERROR", f"an error happend while saving the file: {e}")
+        log_event("ERROR", f"an error happened while saving the file: {e}")
 
 
     try:
         log_event("INFO", f"reading file has started")
         raw_text = file_handler.read_file(filepath)
+        log_event("PROCESS", f"1: {raw_text}")
         log_event("INFO", f"the file was sucsesfully read")
     except Exception as e:
         log_event("ERROR", f"an error happend while reading the file: {e}")
@@ -35,6 +37,7 @@ def process_and_index_file(file, filename):
     try:
         log_event("INFO", f"cleaning text has started")
         cleaned = text_handler.clean_text(raw_text)
+        log_event("PROCESS", cleaned)
         log_event("INFO", f"the text was sucsesfully cleaned")
     except Exception as e:
         log_event("ERROR", f"an error happend while cleaning the text: {e}")
@@ -61,9 +64,9 @@ def process_and_index_file(file, filename):
         dim = embeddings.shape[1]
         index = faiss.IndexFlatL2(dim)
         index.add(embeddings)
-        index_path = os.path.join(INDEX_DIR, f"{filename}.index")
+        index_path = os.path.join(INDEX_DIR, f"uploaded_file.index")
         faiss.write_index(index, index_path)
-        chunks_path = os.path.join(INDEX_DIR, f"{filename}_chunks.npy")
+        chunks_path = os.path.join(INDEX_DIR, f"uploaded_file_chunks.npy")
         np.save(chunks_path, np.array(chunks))
         log_event("INFO", f"index is created and saved sucssesfully")
     except Exception as e:

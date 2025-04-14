@@ -18,10 +18,10 @@ MODEL_RESPONSE_SCORE_THRESHOLD = 65
 async def upload_file(file: UploadFile = File(...)):
     try:
         log_event("INFO", "Processing and indexing uploaded file has started")
-        process_and_index_file(file=file, filename="uploaded_doucement")
-        log_event("INFO", "File was sucsesfully processed and indixed")
+        await process_and_index_file(file=file, filename=file.filename)  
+        log_event("INFO", "File was successfully processed and indexed")
     except Exception as e:
-        log_event("ERROR", f"an error occured while processing and indexing uploaded file: {e}")
+        log_event("ERROR", f"An error occurred while processing and indexing uploaded file: {e}")
     return {"message": "File processed and index created", "file": file.filename}
 
 

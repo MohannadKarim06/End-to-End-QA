@@ -2,7 +2,8 @@ import os
 import fitz
 from docx import Document
 
-UPLOAD_FOLDER = "data/uploaded_files"
+
+UPLOAD_FOLDER = r"data\uploaded_files"
 
 class FILE_HANDLER:
 
@@ -17,11 +18,14 @@ class FILE_HANDLER:
         return "\n".join([para.text for para in doc.paragraphs])
 
     @staticmethod
-    def save_uploaded_file(file, filename):
+    async def save_uploaded_file(file, filename): 
         os.makedirs(UPLOAD_FOLDER, exist_ok=True)
         filepath = os.path.join(UPLOAD_FOLDER, filename)
+        
+        file_content = await file.read() 
+        
         with open(filepath, "wb") as f:
-            f.write(file.read())
+            f.write(file_content)
         return filepath
 
     @staticmethod
