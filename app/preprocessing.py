@@ -20,7 +20,6 @@ async def process_and_index_file(file, filename):
     try:
         log_event("INFO", f"saving file has started")
         filepath = await file_handler.save_uploaded_file(file, filename) 
-        log_event("PROCESS", filepath)
     except Exception as e:
         log_event("ERROR", f"an error happened while saving the file: {e}")
 
@@ -28,7 +27,6 @@ async def process_and_index_file(file, filename):
     try:
         log_event("INFO", f"reading file has started")
         raw_text = file_handler.read_file(filepath)
-        log_event("PROCESS", f"1: {raw_text}")
         log_event("INFO", f"the file was sucsesfully read")
     except Exception as e:
         log_event("ERROR", f"an error happend while reading the file: {e}")
@@ -37,7 +35,6 @@ async def process_and_index_file(file, filename):
     try:
         log_event("INFO", f"cleaning text has started")
         cleaned = text_handler.clean_text(raw_text)
-        log_event("PROCESS", cleaned)
         log_event("INFO", f"the text was sucsesfully cleaned")
     except Exception as e:
         log_event("ERROR", f"an error happend while cleaning the text: {e}")

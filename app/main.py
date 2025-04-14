@@ -18,7 +18,18 @@ MODEL_RESPONSE_SCORE_THRESHOLD = 65
 async def upload_file(file: UploadFile = File(...)):
     try:
         log_event("INFO", "Processing and indexing uploaded file has started")
-        await process_and_index_file(file=file, filename=file.filename)  
+        filename_parts = file.filename.split(".")
+        ext = ""
+        ext = filename_parts[-1]
+
+        await process_and_index_file(file=file, filename=f"uploaded_file.{ext}")
+
+        index_path = os.path.join("data", "index", "uploaded_file.index")
+
+        if not os.path.exists(index_path):
+            return JSONResponse(status_code=404, content={"error": "File upload and processing was not sucessful, try again later."})
+
+
         log_event("INFO", "File was successfully processed and indexed")
     except Exception as e:
         log_event("ERROR", f"An error occurred while processing and indexing uploaded file: {e}")
