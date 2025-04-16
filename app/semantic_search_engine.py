@@ -20,7 +20,7 @@ def load_chunks():
     chunks_path = os.path.join(INDEX_DIR, f"uploaded_file_chunks.npy")
     return np.load(chunks_path, allow_pickle=True)
 
-def search_top_chunk(question: str, filename: str):
+def search_top_chunk(question: str):
     
     index = load_faiss_index()
     chunks = load_chunks()
@@ -39,3 +39,6 @@ def search_top_chunk(question: str, filename: str):
         "score": top_score,
         "index": top_idx
     }
+
+
+print(search_top_chunk("when was the first telescope invented ?"))

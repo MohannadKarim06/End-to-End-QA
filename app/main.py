@@ -11,8 +11,8 @@ from logs.logger import log_event
 
 app = FastAPI()
 
-RELEVENT_CHUNK_SCORE_THRESHOLD = 0.7
-MODEL_RESPONSE_SCORE_THRESHOLD = 65
+RELEVENT_CHUNK_SCORE_THRESHOLD = 0
+MODEL_RESPONSE_SCORE_THRESHOLD = 0
 
 @app.post("/upload")
 async def upload_file(file: UploadFile = File(...)):
@@ -40,7 +40,6 @@ async def upload_file(file: UploadFile = File(...)):
 async def ask_question(
     question: str = Form(...)
 ):
-    filename = "uploaded_document"
     index_path = os.path.join("data", "index", "uploaded_file.index")
 
     if not os.path.exists(index_path):
@@ -48,7 +47,7 @@ async def ask_question(
 
     try:
         log_event("INFO", "Retrieving relevant chunk has started")
-        result = search_top_chunk(question=question, filename=filename)
+        result = search_top_chunk(question=question)
         chunk = result["chunk"]
         score = result["score"]
         log_event("INFO", "Relevant chunk was successfully retrieved")
