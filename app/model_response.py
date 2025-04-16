@@ -2,7 +2,7 @@ import requests
 import os
 
 API_URL = "https://api-inference.huggingface.co/models/deepset/roberta-base-squad2"
-API_TOKEN = "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"
+API_TOKEN = "1"
 
 if not API_URL or not API_TOKEN:
     raise EnvironmentError("Missing API_URL or API_TOKEN environment variables.")
