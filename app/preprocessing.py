@@ -9,8 +9,8 @@ from utils.text_handler import TEXT_HANDLER
 from logs.logger import log_event
 
 
-INDEX_DIR = r"data\index"
-UPLOAD_DIR = r"data\uploaded_files"
+INDEX_DIR = "/app/data/index"
+UPLOAD_DIR = "/app/data/uploaded_files"
 
 file_handler = FILE_HANDLER()
 text_handler = TEXT_HANDLER()

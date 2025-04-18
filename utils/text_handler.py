@@ -1,31 +1,33 @@
 import re
 import spacy
 import numpy as np
-from sentence_transformers import SentenceTransformer
 import os, sys
-
+from transformers import AutoTokenizer, AutoModel
+import torch
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
-nlp = spacy.load("en_core_web_sm")  
-embedding_model = SentenceTransformer("all-MiniLM-L6-v2")  
+INDEX_FOLDER = "/app/data/index"
 
+model_name = "sentence-transformers/all-MiniLM-L6-v2"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModel.from_pretrained(model_name)
 
-INDEX_FOLDER = r"data\index"
 
 class TEXT_HANDLER():
     
 
     def clean_text(self, text):
         """Cleans text: removes special characters, multiple spaces, and extra newlines."""
-        text = re.sub(r'\s+', ' ', text)  # Remove extra spaces
-        text = re.sub(r'[^a-zA-Z0-9\s.,!?]', '', text)  # Remove special characters
+        text = re.sub(r'\s+', ' ', text)
+        text = re.sub(r'[^a-zA-Z0-9\s.,!?]', '', text)  
         return text.strip()
 
 
     def chunk_text(self, text, max_tokens=512):
-        """Splits long text into smaller chunks (512 tokens max) for transformer processing."""
+        
+        nlp = spacy.load("en_core_web_sm")      
         doc = nlp(text)
         chunks = []
         current_chunk = []
@@ -47,8 +49,10 @@ class TEXT_HANDLER():
 
 
     def generate_embeddings(self, text_chunks):
-        """Generates vector embeddings for text chunks using SentenceTransformers."""
-        embeddings = embedding_model.encode(text_chunks, convert_to_numpy=True)
-        embeddings = np.array(embeddings, dtype="float32")
+        encoded_input = tokenizer(text_chunks, padding=True, truncation=True, return_tensors="pt")
+        with torch.no_grad():
+            model_output = model(**encoded_input)
+        embeddings = model_output.last_hidden_state.mean(dim=1)
 
-        return embeddings
+        return embeddings.numpy().astype("float32")
+

@@ -11,8 +11,8 @@ from logs.logger import log_event
 
 app = FastAPI()
 
-RELEVENT_CHUNK_SCORE_THRESHOLD = 0
-MODEL_RESPONSE_SCORE_THRESHOLD = 0
+RELEVENT_CHUNK_SCORE_THRESHOLD = 1.1
+MODEL_RESPONSE_SCORE_THRESHOLD = 0.50
 
 @app.post("/upload")
 async def upload_file(file: UploadFile = File(...)):
@@ -55,7 +55,7 @@ async def ask_question(
         log_event("ERROR", f"An error occurred while retrieving relevant chunk: {e}")
         return {"answer": "error retrieving chunk", "confidence": 0.0, "score": 0.0}
 
-    if score < RELEVENT_CHUNK_SCORE_THRESHOLD:
+    if score > RELEVENT_CHUNK_SCORE_THRESHOLD:
         return {"answer": "no text found", "confidence": 0.0, "score": round(score, 4)}
 
     try:

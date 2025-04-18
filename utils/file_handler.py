@@ -3,7 +3,7 @@ import fitz
 from docx import Document
 
 
-UPLOAD_FOLDER = r"data\uploaded_files"
+UPLOAD_FOLDER = "/app/data/uploaded_files"
 
 class FILE_HANDLER:
 

@@ -7,7 +7,7 @@ from utils.text_handler import TEXT_HANDLER
 
 
 text_handler = TEXT_HANDLER()
-INDEX_DIR = r"data\index"
+INDEX_DIR = "/app/data/index"
 
 
 def load_faiss_index():
@@ -41,4 +41,3 @@ def search_top_chunk(question: str):
     }
 
 
-print(search_top_chunk("when was the first telescope invented ?"))
