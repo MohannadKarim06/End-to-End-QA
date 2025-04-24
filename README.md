@@ -3,7 +3,7 @@
 A full-stack NLP system that extracts precise answers from large unstructured documents (PDF, DOCX, TXT) using semantic search and a fine-tuned transformer model.
 
 > **Built with:** FastAPI, Hugging Face Transformers, FAISS, Streamlit, Docker  
-> **Deployed on:** Render (API + UI)
+> **Deployed on:** fly.io (API)
 
 ---
 
@@ -12,7 +12,7 @@ A full-stack NLP system that extracts precise answers from large unstructured do
 - Upload a document (PDF, DOCX, or TXT)
 - Ask natural language questions about its content
 - Retrieves the most relevant chunk using **semantic search (FAISS + Sentence-BERT)**
-- Extracts answers using a **fine-tuned RoBERTa model on SQuAD2**
+- Extracts answers using a **fine-tuned RoBERTa model on SQuAD2** "with less training epochs due to resources constraints"
 - Returns:
   - Final Answer
   - Confidence Score
@@ -37,17 +37,9 @@ A full-stack NLP system that extracts precise answers from large unstructured do
 
 ### 🚀 Demo
 
-**[Live Demo (Streamlit UI)](https://your-streamlit-ui-url.onrender.com)**  
-*(replace with your actual Render URL)*
+**[Live Demo (Streamlit UI)](https://custom-q-a-system.streamlit.app/)**  
 
 > Upload a document, ask a question, and get a precise answer instantly!
-
----
-
-### 📸 Screenshot
-
-![screenshot](https://via.placeholder.com/800x400.png?text=Document+QA+System+Demo)  
-*(replace with a real screenshot of your Streamlit app in action)*
 
 ---
 
@@ -128,7 +120,6 @@ Ask a question about the uploaded document.
 
 ### ✍️ Author
 
-**[Your Name]**  
-Machine Learning Engineer & NLP Specialist
-[LinkedIn](https://linkedin.com/in/yourname) | [Upwork](https://www.upwork.com/freelancers/~yourprofile) | [GitHub](https://github.com/yourusername)
-
+**Mohannad Karim**  
+NLP & Machine Learning Engineer | MLOps 
+[Upwork](https://www.upwork.com/freelancers/~01683e506def8e06a2?mp_source=share)
